@@ -22,7 +22,7 @@ Widget searchSection() {
       height: 560.h,
     ),
     SafeArea(
-      // bottom: false,
+      bottom: false,
       child: Column(
         children: [
           SizedBox(
@@ -259,7 +259,7 @@ Widget exploreSection(
     propertyCapacity = "8 guests"}) {
   Widget propertyType() {
     return Padding(
-      padding: EdgeInsets.only(right: 8.w),
+      padding: EdgeInsets.only(left: 15.w),
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
@@ -376,27 +376,113 @@ Widget exploreSection(
           ),
         ],
       ),
-      Padding(
-        padding: EdgeInsets.only(left: 15.w),
-        child: SizedBox(
-          height: 250.h,
-          child: ListView.builder(
-            scrollDirection: Axis.horizontal,
-            itemCount: 3,
-            itemBuilder: (ctx, i) => propertyType(),
-          ),
-        ),
-      )
-
       // Different way of achieving the same thing, but with more options.
-
       // CarouselSlider(
       //     items: [propertyType(), propertyType(), propertyType()],
       //     options: CarouselOptions(
       //       height: 250.h,
       //       enableInfiniteScroll: false,
-      //       viewportFraction: 1,
+      //       viewportFraction: .85,
       //     )),
+      SizedBox(
+        height: 250.h,
+        child: ListView.builder(
+          scrollDirection: Axis.horizontal,
+          itemCount: 3,
+          itemBuilder: (ctx, i) => propertyType(),
+        ),
+      ),
+      SizedBox(
+        height: 45.h,
+      )
+    ],
+  );
+}
+
+Widget servicesSection(BuildContext context) {
+  Widget serviceCards(
+      {serviceImage = "assets/cleaning-service.png",
+      serviceText = "Cleaning",
+      index,
+      totalCards}) {
+    return Padding(
+      padding: EdgeInsets.only(right: 8.w, left: index == 0 ? 15.w : 0.w),
+      child: Column(
+        crossAxisAlignment: CrossAxisAlignment.start,
+        children: [
+          Stack(children: [
+            Container(
+              height: 120.h,
+              width: totalCards == 1
+                  ? MediaQuery.of(context).size.width / 1.075
+                  : totalCards == 2
+                      ? MediaQuery.of(context).size.width / 2.175
+                      : 120.w,
+              // width: 120.w,
+              decoration: BoxDecoration(
+                  borderRadius: BorderRadius.circular(25.r),
+                  image: DecorationImage(
+                      image: AssetImage(serviceImage), fit: BoxFit.cover)),
+            ),
+            Positioned(
+                bottom: 0,
+                child: Padding(
+                    padding: EdgeInsets.only(left: 15.w, bottom: 10.h),
+                    child: Text(
+                      serviceText,
+                      style: TextStyle(
+                          fontWeight: FontWeight.w700,
+                          color: Colors.white,
+                          fontSize: 14.sp),
+                    )))
+          ]),
+        ],
+      ),
+    );
+  }
+
+  Widget serviceTile({serviceCity = "Dubai", serviceList = const [1, 2, 3]}) {
+    return Column(
+      crossAxisAlignment: CrossAxisAlignment.start,
+      children: [
+        Padding(
+            padding: EdgeInsets.only(left: 15.w),
+            child: Text(
+              serviceCity,
+              style: TextStyle(fontSize: 18.sp, fontWeight: FontWeight.w600),
+            )),
+        SizedBox(
+          height: 10.h,
+        ),
+        SizedBox(
+          height: 150.h,
+          child: ListView.builder(
+            scrollDirection: Axis.horizontal,
+            itemCount: serviceList.length,
+            itemBuilder: (ctx, i) =>
+                serviceCards(index: i, totalCards: serviceList.length),
+          ),
+        ),
+      ],
+    );
+  }
+
+  return Column(
+    crossAxisAlignment: CrossAxisAlignment.start,
+    children: [
+      Padding(
+        padding: EdgeInsets.only(left: 15.w),
+        child: Text(
+          "Services",
+          style: TextStyle(fontWeight: FontWeight.w600, fontSize: 28.sp),
+        ),
+      ),
+      SizedBox(
+        height: 30.h,
+      ),
+      serviceTile(serviceCity: "Dubai", serviceList: [1, 2, 3, 4, 5, 6]),
+      serviceTile(serviceCity: "Montreal", serviceList: [1, 2]),
+      serviceTile(serviceCity: "Manama", serviceList: [1]),
     ],
   );
 }
@@ -405,7 +491,6 @@ class _HomePageState extends State<HomePage> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      // resizeToAvoidBottomInset: true,
       body: SingleChildScrollView(
         child: Column(
           children: [
@@ -413,7 +498,8 @@ class _HomePageState extends State<HomePage> {
             SizedBox(
               height: 45.h,
             ),
-            exploreSection()
+            exploreSection(),
+            servicesSection(context)
           ],
         ),
       ),
