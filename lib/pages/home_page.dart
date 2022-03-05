@@ -266,9 +266,8 @@ Widget exploreSection(
           Stack(children: [
             Container(
               height: 180.h,
-              width: 315.w,
+              width: 320.w,
               decoration: BoxDecoration(
-                  color: Colors.red,
                   borderRadius: BorderRadius.circular(25.r),
                   image: DecorationImage(
                       image: AssetImage(image), fit: BoxFit.cover)),
@@ -304,9 +303,8 @@ Widget exploreSection(
                 ),
                 Text(
                   propertyName,
-                  style: TextStyle(
-                    fontSize: 14.sp,
-                  ),
+                  style:
+                      TextStyle(fontSize: 12.sp, fontWeight: FontWeight.w600),
                 ),
                 SizedBox(
                   height: 3.h,
@@ -316,7 +314,7 @@ Widget exploreSection(
                     Text(
                       propertyLocation,
                       style: TextStyle(
-                        fontSize: 14.sp,
+                        fontSize: 12.sp,
                       ),
                     ),
                     SizedBox(
@@ -333,7 +331,7 @@ Widget exploreSection(
                     Text(
                       propertyCapacity,
                       style: TextStyle(
-                        fontSize: 14.sp,
+                        fontSize: 12.sp,
                       ),
                     ),
                   ],
@@ -346,34 +344,60 @@ Widget exploreSection(
     );
   }
 
-  return SizedBox(
-    width: 335.w,
-    child: Column(
-      crossAxisAlignment: CrossAxisAlignment.start,
-      children: [
-        Text(
-          "Explore",
-          style: TextStyle(fontWeight: FontWeight.w600, fontSize: 28.sp),
+  return Column(
+    crossAxisAlignment: CrossAxisAlignment.start,
+    children: [
+      Row(
+        mainAxisAlignment: MainAxisAlignment.center,
+        children: [
+          SizedBox(
+            width: 335.w,
+            child: Column(
+              crossAxisAlignment: CrossAxisAlignment.start,
+              children: [
+                Text(
+                  "Explore",
+                  style:
+                      TextStyle(fontWeight: FontWeight.w600, fontSize: 28.sp),
+                ),
+                SizedBox(
+                  height: 9.h,
+                ),
+                Text(
+                  "Beachfront villas to high rise apartments and penthouses, experience your next stay with Stella.",
+                  style:
+                      TextStyle(fontSize: 13.sp, fontWeight: FontWeight.w400),
+                ),
+                SizedBox(
+                  height: 21.h,
+                ),
+              ],
+            ),
+          ),
+        ],
+      ),
+      Padding(
+        padding: EdgeInsets.only(left: 15.w),
+        child: SizedBox(
+          height: 250.h,
+          child: ListView.builder(
+            scrollDirection: Axis.horizontal,
+            itemCount: 3,
+            itemBuilder: (ctx, i) => propertyType(),
+          ),
         ),
-        SizedBox(
-          height: 9.h,
-        ),
-        Text(
-          "Beachfront villas to high rise apartments and penthouses, experience your next stay with Stella.",
-          style: TextStyle(fontSize: 13.sp, fontWeight: FontWeight.w400),
-        ),
-        SizedBox(
-          height: 21.h,
-        ),
-        CarouselSlider(
-            items: [propertyType(), propertyType(), propertyType()],
-            options: CarouselOptions(
-              height: 250.h,
-              enableInfiniteScroll: false,
-              viewportFraction: .95,
-            ))
-      ],
-    ),
+      )
+
+      // Different way of achieving the same thing, but with more options.
+
+      // CarouselSlider(
+      //     items: [propertyType(), propertyType(), propertyType()],
+      //     options: CarouselOptions(
+      //       height: 250.h,
+      //       enableInfiniteScroll: false,
+      //       viewportFraction: 1,
+      //     )),
+    ],
   );
 }
 
