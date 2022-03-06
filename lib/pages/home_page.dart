@@ -1,7 +1,10 @@
 import 'package:carousel_slider/carousel_slider.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
+import 'package:stella_stays_mobile/components/service_card.dart';
+import 'package:stella_stays_mobile/components/service_tile.dart';
 import 'package:stella_stays_mobile/constants.dart';
+import 'package:stella_stays_mobile/pages/service_page.dart';
 
 class HomePage extends StatefulWidget {
   const HomePage({Key? key}) : super(key: key);
@@ -11,74 +14,81 @@ class HomePage extends StatefulWidget {
 }
 
 Widget searchSection() {
-  return Stack(children: [
-    //TODO: Try to replicate the gradient in the design.
-    //Tried to use RadialGradient to get the gradient effect but I wasn't
-    //able to replicate it.
-    Image.asset(
-      "assets/background.png",
-      fit: BoxFit.cover,
-      width: double.infinity,
-      height: 560.h,
-    ),
-    SafeArea(
-      bottom: false,
-      child: Column(
-        children: [
-          SizedBox(
-            height: 20.h,
-          ),
-          Row(
-            mainAxisAlignment: MainAxisAlignment.center,
-            children: [
-              Image.asset("assets/logo.png", fit: BoxFit.cover, width: 86.w),
-            ],
-          ),
-          SizedBox(
-            height: 48.h,
-          ),
-          SizedBox(
-            width: 308.w,
-            child: Text(
-              "Change the way you travel & live",
-              textAlign: TextAlign.center,
-              style: TextStyle(
-                  fontSize: 38.sp,
-                  fontWeight: FontWeight.w700,
-                  color: Colors.white),
-            ),
-          ),
-          SizedBox(
-            height: 10.h,
-          ),
-          SizedBox(
-            width: 265.w,
-            child: Text(
-              "Stay with us in your favorite neighborhoods around the world.",
-              textAlign: TextAlign.center,
-              style: TextStyle(
-                  fontSize: 12.sp,
-                  fontWeight: FontWeight.w700,
-                  color: Colors.white),
-            ),
-          ),
-          SizedBox(
-            height: 180.h,
-          ),
-          searchBar()
-        ],
+  return Container(
+    color: Colors.white,
+    child: Stack(children: [
+      //TODO: Try to replicate the gradient in the design.
+      //Tried to use RadialGradient to get the gradient effect but I wasn't
+      //able to replicate it.
+      Image.asset(
+        "assets/background.png",
+        fit: BoxFit.cover,
+        width: double.infinity,
+        height: 560.h,
       ),
-    ),
-  ]);
+      SafeArea(
+        bottom: false,
+        child: Column(
+          children: [
+            SizedBox(
+              height: 20.h,
+            ),
+            Row(
+              mainAxisAlignment: MainAxisAlignment.center,
+              children: [
+                Image.asset("assets/logo.png", fit: BoxFit.cover, width: 86.w),
+              ],
+            ),
+            SizedBox(
+              height: 48.h,
+            ),
+            SizedBox(
+              width: 308.w,
+              child: Text(
+                "Change the way you travel & live",
+                textAlign: TextAlign.center,
+                style: TextStyle(
+                    fontSize: 38.sp,
+                    fontWeight: FontWeight.w700,
+                    color: Colors.white),
+              ),
+            ),
+            SizedBox(
+              height: 10.h,
+            ),
+            SizedBox(
+              width: 265.w,
+              child: Text(
+                "Stay with us in your favorite neighborhoods around the world.",
+                textAlign: TextAlign.center,
+                style: TextStyle(
+                    fontSize: 12.sp,
+                    fontWeight: FontWeight.w700,
+                    color: Colors.white),
+              ),
+            ),
+            SizedBox(
+              height: 180.h,
+            ),
+            searchBar()
+          ],
+        ),
+      ),
+    ]),
+  );
 }
 
 Widget searchBar() {
   return Container(
     height: 280.h,
     width: 335.w,
+    margin: EdgeInsets.only(bottom: 10.h),
     decoration: BoxDecoration(
-      boxShadow: const <BoxShadow>[
-        BoxShadow(color: Colors.white24, blurRadius: 10, offset: Offset(0.0, 0))
+      boxShadow: <BoxShadow>[
+        BoxShadow(
+          color: Colors.black.withOpacity(.2),
+          blurRadius: 5,
+        )
       ],
       borderRadius: BorderRadius.circular(26.r),
       color: Colors.white,
@@ -344,163 +354,105 @@ Widget exploreSection(
     );
   }
 
-  return Column(
-    crossAxisAlignment: CrossAxisAlignment.start,
-    children: [
-      Row(
-        mainAxisAlignment: MainAxisAlignment.center,
-        children: [
-          SizedBox(
-            width: 335.w,
-            child: Column(
-              crossAxisAlignment: CrossAxisAlignment.start,
-              children: [
-                Text(
-                  "Explore",
-                  style:
-                      TextStyle(fontWeight: FontWeight.w600, fontSize: 28.sp),
-                ),
-                SizedBox(
-                  height: 9.h,
-                ),
-                Text(
-                  "Beachfront villas to high rise apartments and penthouses, experience your next stay with Stella.",
-                  style:
-                      TextStyle(fontSize: 13.sp, fontWeight: FontWeight.w400),
-                ),
-                SizedBox(
-                  height: 21.h,
-                ),
-              ],
+  return Container(
+    color: Colors.white,
+    child: Column(
+      crossAxisAlignment: CrossAxisAlignment.start,
+      children: [
+        Row(
+          mainAxisAlignment: MainAxisAlignment.center,
+          children: [
+            SizedBox(
+              width: 335.w,
+              child: Column(
+                crossAxisAlignment: CrossAxisAlignment.start,
+                children: [
+                  Text(
+                    "Explore",
+                    style:
+                        TextStyle(fontWeight: FontWeight.w600, fontSize: 28.sp),
+                  ),
+                  SizedBox(
+                    height: 9.h,
+                  ),
+                  Text(
+                    "Beachfront villas to high rise apartments and penthouses, experience your next stay with Stella.",
+                    style:
+                        TextStyle(fontSize: 13.sp, fontWeight: FontWeight.w400),
+                  ),
+                  SizedBox(
+                    height: 21.h,
+                  ),
+                ],
+              ),
             ),
-          ),
-        ],
-      ),
-      // Different way of achieving the same thing, but with more options.
-      // CarouselSlider(
-      //     items: [propertyType(), propertyType(), propertyType()],
-      //     options: CarouselOptions(
-      //       height: 250.h,
-      //       enableInfiniteScroll: false,
-      //       viewportFraction: .85,
-      //     )),
-      SizedBox(
-        height: 250.h,
-        child: ListView.builder(
-          scrollDirection: Axis.horizontal,
-          itemCount: 3,
-          itemBuilder: (ctx, i) => propertyType(),
+          ],
         ),
-      ),
-      SizedBox(
-        height: 45.h,
-      )
-    ],
+        // Different way of achieving the same thing, but with more options.
+        // CarouselSlider(
+        //     items: [propertyType(), propertyType(), propertyType()],
+        //     options: CarouselOptions(
+        //       height: 250.h,
+        //       enableInfiniteScroll: false,
+        //       viewportFraction: .85,
+        //     )),
+        SizedBox(
+          height: 250.h,
+          child: ListView.builder(
+            scrollDirection: Axis.horizontal,
+            itemCount: 3,
+            itemBuilder: (ctx, i) => propertyType(),
+          ),
+        ),
+      ],
+    ),
   );
 }
 
 Widget servicesSection(BuildContext context) {
-  Widget serviceCards(
-      {serviceImage = "assets/cleaning-service.png",
-      serviceText = "Cleaning",
-      index,
-      totalCards}) {
-    return Padding(
-      padding: EdgeInsets.only(right: 8.w, left: index == 0 ? 15.w : 0.w),
-      child: Column(
-        crossAxisAlignment: CrossAxisAlignment.start,
-        children: [
-          Stack(children: [
-            Container(
-              height: 120.h,
-              width: totalCards == 1
-                  ? MediaQuery.of(context).size.width / 1.075
-                  : totalCards == 2
-                      ? MediaQuery.of(context).size.width / 2.175
-                      : 120.w,
-              // width: 120.w,
-              decoration: BoxDecoration(
-                  borderRadius: BorderRadius.circular(25.r),
-                  image: DecorationImage(
-                      image: AssetImage(serviceImage), fit: BoxFit.cover)),
-            ),
-            Positioned(
-                bottom: 0,
-                child: Padding(
-                    padding: EdgeInsets.only(left: 15.w, bottom: 10.h),
-                    child: Text(
-                      serviceText,
-                      style: TextStyle(
-                          fontWeight: FontWeight.w700,
-                          color: Colors.white,
-                          fontSize: 14.sp),
-                    )))
-          ]),
-        ],
-      ),
-    );
-  }
-
-  Widget serviceTile({serviceCity = "Dubai", serviceList = const [1, 2, 3]}) {
-    return Column(
+  return Padding(
+    padding: EdgeInsets.only(top: 24.h, bottom: 65.h),
+    child: Column(
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [
         Padding(
-            padding: EdgeInsets.only(left: 15.w),
-            child: Text(
-              serviceCity,
-              style: TextStyle(fontSize: 18.sp, fontWeight: FontWeight.w600),
-            )),
-        SizedBox(
-          height: 10.h,
-        ),
-        SizedBox(
-          height: 150.h,
-          child: ListView.builder(
-            scrollDirection: Axis.horizontal,
-            itemCount: serviceList.length,
-            itemBuilder: (ctx, i) =>
-                serviceCards(index: i, totalCards: serviceList.length),
+          padding: EdgeInsets.only(left: 15.w),
+          child: Text(
+            "Services",
+            style: TextStyle(fontWeight: FontWeight.w600, fontSize: 28.sp),
           ),
         ),
-      ],
-    );
-  }
-
-  return Column(
-    crossAxisAlignment: CrossAxisAlignment.start,
-    children: [
-      Padding(
-        padding: EdgeInsets.only(left: 15.w),
-        child: Text(
-          "Services",
-          style: TextStyle(fontWeight: FontWeight.w600, fontSize: 28.sp),
+        SizedBox(
+          height: 30.h,
         ),
-      ),
-      SizedBox(
-        height: 30.h,
-      ),
-      serviceTile(serviceCity: "Dubai", serviceList: [1, 2, 3, 4, 5, 6]),
-      serviceTile(serviceCity: "Montreal", serviceList: [1, 2]),
-      serviceTile(serviceCity: "Manama", serviceList: [1]),
-    ],
+        const ServiceTile(
+            serviceCity: "Dubai", serviceList: [1, 2, 3, 4, 5, 6]),
+      ],
+    ),
   );
 }
 
 class _HomePageState extends State<HomePage> {
   @override
   Widget build(BuildContext context) {
-    return Scaffold(
-      body: SingleChildScrollView(
-        child: Column(
-          children: [
-            searchSection(),
-            SizedBox(
-              height: 45.h,
-            ),
-            exploreSection(),
-            servicesSection(context)
-          ],
+    return GestureDetector(
+      onTap: () {
+        FocusScope.of(context).requestFocus(FocusNode());
+      },
+      child: Scaffold(
+        body: SingleChildScrollView(
+          child: Column(
+            crossAxisAlignment: CrossAxisAlignment.start,
+            children: [
+              searchSection(),
+              Container(
+                color: Colors.white,
+                height: 45.h,
+              ),
+              exploreSection(),
+              servicesSection(context)
+            ],
+          ),
         ),
       ),
     );
