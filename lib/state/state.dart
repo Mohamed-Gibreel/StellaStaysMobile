@@ -1,5 +1,6 @@
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
+import 'package:stella_stays_mobile/models/property.dart';
 import 'package:stella_stays_mobile/models/service.dart';
 
 class AppState with ChangeNotifier {
@@ -23,6 +24,26 @@ class AppState with ChangeNotifier {
         city: ["Dubai", "Manama"],
         title: "Food",
         imageUrl: "assets/cleaning-service.png"),
+  ];
+  List<Property> properties = [
+    Property(
+        propertyPrice: "1,250",
+        propertyCapacity: 8,
+        propertyImage: "assets/slider-1.png",
+        propertyName: "Cozy Beachfront Villa | Private Pool | 4BDR",
+        propertyLocation: "Dubai"),
+    Property(
+        propertyPrice: "1,250",
+        propertyCapacity: 8,
+        propertyImage: "assets/slider-1.png",
+        propertyName: "Cozy Beachfront Villa | Private Pool | 4BDR",
+        propertyLocation: "Dubai"),
+    Property(
+        propertyPrice: "1,250",
+        propertyCapacity: 8,
+        propertyImage: "assets/slider-1.png",
+        propertyName: "Cozy Beachfront Villa | Private Pool | 4BDR",
+        propertyLocation: "Dubai"),
   ];
 
   loginUser(UserCredential loggedInUser) {

@@ -1,3 +1,4 @@
+import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:provider/provider.dart';
@@ -7,6 +8,7 @@ import 'package:stella_stays_mobile/components/search_bar.dart';
 import 'package:stella_stays_mobile/components/service_skeleton_tile.dart';
 import 'package:stella_stays_mobile/components/service_tile.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:stella_stays_mobile/constants.dart';
 import 'package:stella_stays_mobile/models/service.dart';
 import 'package:stella_stays_mobile/state/state.dart';
 import 'package:carousel_slider/carousel_slider.dart';
@@ -134,20 +136,27 @@ Widget exploreSection(BuildContext ctx) {
                     scrollDirection: Axis.horizontal,
                     itemBuilder: (ctx, i) => const PropertySkeletonCard()),
               )
-            : SizedBox(
-                height: 250.h,
-                child: ListView.builder(
-                  scrollDirection: Axis.horizontal,
-                  itemCount: 3,
-                  itemBuilder: (ctx, i) => const PropertyCard(
-                    propertyPrice: "1,250",
-                    propertyCapacity: 8,
-                    propertyImage: "assets/slider-1.png",
-                    propertyName: "Cozy Beachfront Villa | Private Pool | 4BDR",
-                    propertyLocation: "Dubai",
+            : Provider.of<AppState>(ctx, listen: false).properties.isNotEmpty
+                ? SizedBox(
+                    height: 250.h,
+                    child: ListView.builder(
+                      scrollDirection: Axis.horizontal,
+                      itemCount: Provider.of<AppState>(ctx, listen: false)
+                          .properties
+                          .length,
+                      itemBuilder: (ctx, i) => PropertyCard(
+                          property: Provider.of<AppState>(ctx, listen: false)
+                              .properties[i]),
+                    ),
+                  )
+                : SizedBox(
+                    height: 125.h,
+                    child: Center(
+                        child: Text(
+                      "No properties found",
+                      style: TextStyle(fontSize: 14.sp),
+                    )),
                   ),
-                ),
-              ),
       ],
     ),
   );
@@ -158,9 +167,20 @@ List<Widget> convertServicesToWidgets(BuildContext ctx) {
       Provider.of<AppState>(ctx, listen: false).filteredServices;
   List<Widget> widgets = [];
   //TODO: Sort map before adding to widget.
-  services.forEach((key, value) {
-    widgets.add(ServiceTile(serviceCity: key, serviceList: value.toList()));
-  });
+  if (services.isNotEmpty) {
+    services.forEach((key, value) {
+      widgets.add(ServiceTile(serviceCity: key, serviceList: value.toList()));
+    });
+  } else {
+    widgets.add(SizedBox(
+      height: 50.h,
+      child: Center(
+          child: Text(
+        "No services found",
+        style: TextStyle(fontSize: 14.sp),
+      )),
+    ));
+  }
 
   return widgets;
 }
@@ -193,12 +213,18 @@ Widget servicesSection(BuildContext ctx) {
 
 class _HomePageState extends State<HomePage> {
   FirebaseFirestore firestore = FirebaseFirestore.instance;
+  int _currentIndex = 0;
 
   @override
   void initState() {
     super.initState();
-    // getData();
+    getData();
     getServicesFromFirebase();
+  }
+
+  @override
+  void dispose() {
+    super.dispose();
   }
 
   getData() async {
@@ -219,6 +245,79 @@ class _HomePageState extends State<HomePage> {
         FocusScope.of(context).requestFocus(FocusNode());
       },
       child: Scaffold(
+        bottomNavigationBar: CupertinoTabBar(
+          currentIndex: _currentIndex,
+          backgroundColor: Colors.white,
+          border: const Border(top: BorderSide(color: Color(0xFFDEE4E7))),
+          activeColor: Colors.black,
+          items: [
+            BottomNavigationBarItem(
+                icon: Container(
+                  margin: EdgeInsets.only(top: 7.0.h),
+                  child: Image.asset(
+                    "assets/book.png",
+                    color:
+                        _currentIndex == 0 ? Constants.mainColor : Colors.grey,
+                    height: 18.h,
+                  ),
+                ),
+                label: "Book",
+                backgroundColor: Colors.white),
+            BottomNavigationBarItem(
+                icon: Container(
+                  margin: EdgeInsets.only(top: 7.0.h),
+                  child: Image.asset(
+                    "assets/my-stays.png",
+                    color:
+                        _currentIndex == 1 ? Constants.mainColor : Colors.grey,
+                    height: 18.h,
+                  ),
+                ),
+                label: "My stays",
+                backgroundColor: Colors.white),
+            BottomNavigationBarItem(
+                icon: Container(
+                  margin: EdgeInsets.only(top: 7.0.h),
+                  child: Image.asset(
+                    "assets/explore.png",
+                    color:
+                        _currentIndex == 2 ? Constants.mainColor : Colors.grey,
+                    height: 18.h,
+                  ),
+                ),
+                label: "Explore",
+                backgroundColor: Colors.white),
+            BottomNavigationBarItem(
+                icon: Container(
+                  margin: EdgeInsets.only(top: 7.0.h),
+                  child: Image.asset(
+                    "assets/inbox.png",
+                    color:
+                        _currentIndex == 3 ? Constants.mainColor : Colors.grey,
+                    height: 18.h,
+                  ),
+                ),
+                label: "Inbox",
+                backgroundColor: Colors.white),
+            BottomNavigationBarItem(
+                icon: Container(
+                  margin: EdgeInsets.only(top: 7.0.h),
+                  child: Icon(
+                    Icons.supervised_user_circle_outlined,
+                    color:
+                        _currentIndex == 4 ? Constants.mainColor : Colors.grey,
+                    size: 25,
+                  ),
+                ),
+                label: "Profile",
+                backgroundColor: Colors.white),
+          ],
+          onTap: (index) {
+            setState(() {
+              _currentIndex = index;
+            });
+          },
+        ),
         body: SingleChildScrollView(
           child: Column(
             crossAxisAlignment: CrossAxisAlignment.start,

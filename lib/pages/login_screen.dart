@@ -28,6 +28,12 @@ class _LoginScreenState extends State<LoginScreen> {
       UserCredential userCredential = await FirebaseAuth.instance
           .signInWithEmailAndPassword(email: email, password: password);
       Provider.of<AppState>(context, listen: false).loginUser(userCredential);
+      debugPrint('=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-');
+      debugPrint("USER LOGGED IN ");
+      print(userCredential);
+      debugPrint('=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-');
+      Navigator.pushNamedAndRemoveUntil(
+          context, "/", (Route<dynamic> route) => false);
     } on FirebaseAuthException catch (e) {
       //Could have used Get snack bar for a more appealing message, but I do not
       // want to bloat the application with plugins.
@@ -81,8 +87,11 @@ class _LoginScreenState extends State<LoginScreen> {
                   ),
                 ),
                 TextFormField(
-                  autovalidateMode: AutovalidateMode.always,
-                  validator: EmailValidator(errorText: "Invalid Email"),
+                  autovalidateMode: AutovalidateMode.onUserInteraction,
+                  validator: MultiValidator([
+                    RequiredValidator(errorText: "Email is required"),
+                    EmailValidator(errorText: "Invalid Email"),
+                  ]),
                   controller: emailController,
                   onEditingComplete: () {
                     passwordNode.requestFocus();
@@ -149,8 +158,16 @@ class _LoginScreenState extends State<LoginScreen> {
                               color: Constants.mainColor, width: 0.w))),
                 ),
                 SizedBox(
-                  height: 50.h,
+                  height: 10.h,
                 ),
+                TextButton(
+                    onPressed: () {
+                      setState(() {
+                        emailController.text = "developertest@stellastays.com";
+                        passwordController.text = "DevTest123!@#";
+                      });
+                    },
+                    child: Text("Fill details")),
                 GestureDetector(
                   onTap: loading
                       ? null

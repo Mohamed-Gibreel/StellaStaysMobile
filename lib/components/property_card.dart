@@ -1,20 +1,10 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
+import 'package:stella_stays_mobile/models/property.dart';
 
 class PropertyCard extends StatelessWidget {
-  final String propertyImage;
-  final String propertyName;
-  final String propertyLocation;
-  final int propertyCapacity;
-  final String propertyPrice;
-  const PropertyCard(
-      {Key? key,
-      required this.propertyImage,
-      required this.propertyName,
-      required this.propertyLocation,
-      required this.propertyCapacity,
-      required this.propertyPrice})
-      : super(key: key);
+  final Property property;
+  const PropertyCard({Key? key, required this.property}) : super(key: key);
 
   @override
   Widget build(BuildContext context) {
@@ -30,7 +20,8 @@ class PropertyCard extends StatelessWidget {
               decoration: BoxDecoration(
                   borderRadius: BorderRadius.circular(25.r),
                   image: DecorationImage(
-                      image: AssetImage(propertyImage), fit: BoxFit.cover)),
+                      image: AssetImage(property.propertyImage),
+                      fit: BoxFit.cover)),
             ),
             Positioned(
                 right: 0,
@@ -44,7 +35,7 @@ class PropertyCard extends StatelessWidget {
                         padding: EdgeInsets.symmetric(
                             horizontal: 17.w, vertical: 7.h),
                         child: Text(
-                          "from AED $propertyPrice/ night",
+                          "from AED ${property.propertyPrice}/ night",
                           style: TextStyle(
                               fontSize: 13.sp,
                               color: Colors.white,
@@ -62,7 +53,7 @@ class PropertyCard extends StatelessWidget {
                   height: 10.h,
                 ),
                 Text(
-                  propertyName,
+                  property.propertyName,
                   style:
                       TextStyle(fontSize: 12.sp, fontWeight: FontWeight.w600),
                 ),
@@ -72,7 +63,7 @@ class PropertyCard extends StatelessWidget {
                 Row(
                   children: [
                     Text(
-                      propertyLocation,
+                      property.propertyLocation,
                       style: TextStyle(
                         fontSize: 12.sp,
                       ),
@@ -89,9 +80,9 @@ class PropertyCard extends StatelessWidget {
                       width: 8.w,
                     ),
                     Text(
-                      propertyCapacity > 1
-                          ? "${propertyCapacity.toString()} guests"
-                          : "${propertyCapacity.toString()} guest",
+                      property.propertyCapacity > 1
+                          ? "${property.propertyCapacity.toString()} guests"
+                          : "${property.propertyCapacity.toString()} guest",
                       style: TextStyle(
                         fontSize: 12.sp,
                       ),
