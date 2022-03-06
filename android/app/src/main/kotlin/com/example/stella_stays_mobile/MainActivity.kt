@@ -1,4 +1,4 @@
-package com.example.stella_stays_mobile
+package com.stella.developertest
 
 import io.flutter.embedding.android.FlutterActivity
 

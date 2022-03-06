@@ -1,18 +1,68 @@
+import 'dart:developer';
+import 'dart:io';
+
 import 'package:flutter/material.dart';
 import 'package:flutter/rendering.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:stella_stays_mobile/constants.dart';
 import 'package:modal_bottom_sheet/modal_bottom_sheet.dart';
+import 'package:stella_stays_mobile/models/service.dart';
+import 'package:url_launcher/url_launcher.dart';
 
-class ServicePage extends StatefulWidget {
-  final String serviceDetails;
-  const ServicePage({Key? key, required this.serviceDetails}) : super(key: key);
+// class ServicePage extends StatefulWidget {
 
-  @override
-  State<ServicePage> createState() => _ServicePageState();
-}
+//   @override
+//   State<ServicePage> createState() => _ServicePageState();
+// }
 
-class _ServicePageState extends State<ServicePage> {
+class ServicePage extends StatelessWidget {
+  final Service service;
+  final String heroTag;
+  const ServicePage({Key? key, required this.heroTag, required this.service})
+      : super(key: key);
+
+  void openWhatsApp(BuildContext ctx) async {
+    var whatsAppUrl = "whatsapp://send?phone=+971505303600";
+    try {
+      if (Platform.isIOS) {
+        if (await canLaunch('whatsapp://')) {
+          await launch(whatsAppUrl, forceSafariVC: false);
+        } else {
+          await launch(whatsAppUrl, forceSafariVC: true);
+        }
+      } else {
+        await canLaunch(whatsAppUrl)
+            ? launch(whatsAppUrl)
+            : ScaffoldMessenger.of(ctx).showSnackBar(const SnackBar(
+                content: Text(
+                    "Cannot find a whatsapp on this device. Please install one first."),
+              ));
+      }
+    } catch (e) {
+      ScaffoldMessenger.of(ctx).showSnackBar(const SnackBar(
+        content: Text("Something went wrong! Please try again."),
+      ));
+    }
+  }
+
+  Future<void> openEmail(BuildContext ctx, String text) async {
+    final email = "mailto:?subject=&body=${Uri.encodeComponent(text)}";
+    try {
+      if (await canLaunch(email)) {
+        await launch(email);
+      } else {
+        ScaffoldMessenger.of(ctx).showSnackBar(const SnackBar(
+          content: Text(
+              "Cannot find a mailing application on this device. Please install one first."),
+        ));
+      }
+    } catch (e) {
+      ScaffoldMessenger.of(ctx).showSnackBar(const SnackBar(
+        content: Text("Cannot find an application to send a mail"),
+      ));
+    }
+  }
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -23,12 +73,12 @@ class _ServicePageState extends State<ServicePage> {
         Column(crossAxisAlignment: CrossAxisAlignment.start, children: [
           Stack(children: [
             Hero(
-              tag: widget.serviceDetails,
+              tag: heroTag,
               child: Container(
                 height: 260.h,
-                decoration: const BoxDecoration(
+                decoration: BoxDecoration(
                     image: DecorationImage(
-                        image: AssetImage("assets/cleaning-service.png"),
+                        image: AssetImage(service.imageUrl ?? ""),
                         fit: BoxFit.cover)),
               ),
             ),
@@ -65,7 +115,7 @@ class _ServicePageState extends State<ServicePage> {
                   padding:
                       EdgeInsets.symmetric(vertical: 20.h, horizontal: 27.w),
                   child: Text(
-                    "Cleaning Service",
+                    service.title ?? "N/A",
                     style: TextStyle(
                         fontSize: 28.sp,
                         color: Colors.white,
@@ -166,16 +216,21 @@ class _ServicePageState extends State<ServicePage> {
                                       topLeft: Radius.circular(16.r),
                                       topRight: Radius.circular(16.r)),
                                 ),
-                                child: Padding(
-                                  padding:
-                                      EdgeInsets.symmetric(horizontal: 20.w),
-                                  child: Row(
-                                    mainAxisAlignment:
-                                        MainAxisAlignment.spaceBetween,
-                                    children: const [
-                                      Text("Whatsapp"),
-                                      Icon(Icons.whatsapp)
-                                    ],
+                                child: InkWell(
+                                  onTap: () {
+                                    openWhatsApp(context);
+                                  },
+                                  child: Padding(
+                                    padding:
+                                        EdgeInsets.symmetric(horizontal: 20.w),
+                                    child: Row(
+                                      mainAxisAlignment:
+                                          MainAxisAlignment.spaceBetween,
+                                      children: const [
+                                        Text("Whatsapp"),
+                                        Icon(Icons.whatsapp)
+                                      ],
+                                    ),
                                   ),
                                 )
                                 // child:
@@ -190,16 +245,22 @@ class _ServicePageState extends State<ServicePage> {
                                     borderRadius: BorderRadius.only(
                                         bottomLeft: Radius.circular(16.r),
                                         bottomRight: Radius.circular(16.r))),
-                                child: Padding(
-                                  padding:
-                                      EdgeInsets.symmetric(horizontal: 20.w),
-                                  child: Row(
-                                    mainAxisAlignment:
-                                        MainAxisAlignment.spaceBetween,
-                                    children: const [
-                                      Text("Email"),
-                                      Icon(Icons.email_outlined)
-                                    ],
+                                child: InkWell(
+                                  onTap: () {
+                                    openEmail(
+                                        context, "Welcome to Stella Stays");
+                                  },
+                                  child: Padding(
+                                    padding:
+                                        EdgeInsets.symmetric(horizontal: 20.w),
+                                    child: Row(
+                                      mainAxisAlignment:
+                                          MainAxisAlignment.spaceBetween,
+                                      children: const [
+                                        Text("Email"),
+                                        Icon(Icons.email_outlined)
+                                      ],
+                                    ),
                                   ),
                                 )),
                           ],

@@ -1,13 +1,13 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 
-class PropertyType extends StatelessWidget {
+class PropertyCard extends StatelessWidget {
   final String propertyImage;
   final String propertyName;
   final String propertyLocation;
   final int propertyCapacity;
   final String propertyPrice;
-  const PropertyType(
+  const PropertyCard(
       {Key? key,
       required this.propertyImage,
       required this.propertyName,

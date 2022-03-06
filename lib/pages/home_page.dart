@@ -1,12 +1,15 @@
-import 'package:carousel_slider/carousel_slider.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
+import 'package:provider/provider.dart';
 import 'package:stella_stays_mobile/components/property_card.dart';
+import 'package:stella_stays_mobile/components/property_skeleton_card.dart';
 import 'package:stella_stays_mobile/components/search_bar.dart';
-import 'package:stella_stays_mobile/components/service_card.dart';
+import 'package:stella_stays_mobile/components/service_skeleton_tile.dart';
 import 'package:stella_stays_mobile/components/service_tile.dart';
-import 'package:stella_stays_mobile/constants.dart';
-import 'package:stella_stays_mobile/pages/service_page.dart';
+import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:stella_stays_mobile/models/service.dart';
+import 'package:stella_stays_mobile/state/state.dart';
+import 'package:carousel_slider/carousel_slider.dart';
 
 class HomePage extends StatefulWidget {
   const HomePage({Key? key}) : super(key: key);
@@ -15,7 +18,7 @@ class HomePage extends StatefulWidget {
   State<HomePage> createState() => _HomePageState();
 }
 
-Widget searchSection() {
+Widget searchSection(BuildContext ctx) {
   return Container(
     color: Colors.white,
     child: Stack(children: [
@@ -80,7 +83,7 @@ Widget searchSection() {
   );
 }
 
-Widget exploreSection() {
+Widget exploreSection(BuildContext ctx) {
   return Container(
     color: Colors.white,
     child: Column(
@@ -123,26 +126,46 @@ Widget exploreSection() {
         //       enableInfiniteScroll: false,
         //       viewportFraction: .85,
         //     )),
-        SizedBox(
-          height: 250.h,
-          child: ListView.builder(
-            scrollDirection: Axis.horizontal,
-            itemCount: 3,
-            itemBuilder: (ctx, i) => const PropertyType(
-              propertyPrice: "1,250",
-              propertyCapacity: 8,
-              propertyImage: "assets/slider-1.png",
-              propertyName: "Cozy Beachfront Villa | Private Pool | 4BDR",
-              propertyLocation: "Dubai",
-            ),
-          ),
-        ),
+        Provider.of<AppState>(ctx, listen: true).loadingData
+            ? SizedBox(
+                height: 250.h,
+                child: ListView.builder(
+                    itemCount: 5,
+                    scrollDirection: Axis.horizontal,
+                    itemBuilder: (ctx, i) => const PropertySkeletonCard()),
+              )
+            : SizedBox(
+                height: 250.h,
+                child: ListView.builder(
+                  scrollDirection: Axis.horizontal,
+                  itemCount: 3,
+                  itemBuilder: (ctx, i) => const PropertyCard(
+                    propertyPrice: "1,250",
+                    propertyCapacity: 8,
+                    propertyImage: "assets/slider-1.png",
+                    propertyName: "Cozy Beachfront Villa | Private Pool | 4BDR",
+                    propertyLocation: "Dubai",
+                  ),
+                ),
+              ),
       ],
     ),
   );
 }
 
-Widget servicesSection(BuildContext context) {
+List<Widget> convertServicesToWidgets(BuildContext ctx) {
+  Map<String, Iterable<Service>> services =
+      Provider.of<AppState>(ctx, listen: false).filteredServices;
+  List<Widget> widgets = [];
+  //TODO: Sort map before adding to widget.
+  services.forEach((key, value) {
+    widgets.add(ServiceTile(serviceCity: key, serviceList: value.toList()));
+  });
+
+  return widgets;
+}
+
+Widget servicesSection(BuildContext ctx) {
   return Padding(
     padding: EdgeInsets.only(top: 24.h, bottom: 65.h),
     child: Column(
@@ -158,14 +181,37 @@ Widget servicesSection(BuildContext context) {
         SizedBox(
           height: 30.h,
         ),
-        const ServiceTile(
-            serviceCity: "Dubai", serviceList: [1, 2, 3, 4, 5, 6]),
+        Provider.of<AppState>(ctx, listen: false).loadingData
+            ? const ServiceSkeletonTile()
+            : Column(
+                children: convertServicesToWidgets(ctx),
+              )
       ],
     ),
   );
 }
 
 class _HomePageState extends State<HomePage> {
+  FirebaseFirestore firestore = FirebaseFirestore.instance;
+
+  @override
+  void initState() {
+    super.initState();
+    // getData();
+    getServicesFromFirebase();
+  }
+
+  getData() async {
+    await Provider.of<AppState>(context, listen: false).loadData();
+  }
+
+  void getServicesFromFirebase() async {
+    CollectionReference services = firestore.collection('services');
+    debugPrint('=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-');
+    print(await services.get());
+    debugPrint('=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-');
+  }
+
   @override
   Widget build(BuildContext context) {
     return GestureDetector(
@@ -177,12 +223,12 @@ class _HomePageState extends State<HomePage> {
           child: Column(
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
-              searchSection(),
+              searchSection(context),
               Container(
                 color: Colors.white,
                 height: 45.h,
               ),
-              exploreSection(),
+              exploreSection(context),
               servicesSection(context)
             ],
           ),
