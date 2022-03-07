@@ -147,6 +147,7 @@ class _SearchBarState extends State<SearchBar> {
                   onTap: (() async {
                     PickerDateRange? selectedRange =
                         await showBarModalBottomSheet(
+                            topControl: const SizedBox(),
                             context: context,
                             clipBehavior: Clip.none,
                             builder: (BuildContext ctx) => DatePicker(

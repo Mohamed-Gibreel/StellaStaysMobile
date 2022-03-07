@@ -153,7 +153,11 @@ class _DatePickerState extends State<DatePicker>
               ),
               SafeArea(
                 child: Container(
-                  padding: EdgeInsets.symmetric(horizontal: 20.w),
+                  decoration: BoxDecoration(
+                      border: Border(
+                          top:
+                              BorderSide(color: Colors.black.withOpacity(.3)))),
+                  padding: EdgeInsets.only(left: 20.w, right: 20.w, top: 15.h),
                   child: Row(
                     mainAxisAlignment: MainAxisAlignment.spaceBetween,
                     children: [
