@@ -45,7 +45,7 @@ class _MyAppState extends State<MyApp> {
           ),
           initialRoute: "/loginscreen",
           routes: {
-            "/": (BuildContext context) => const HomePage(),
+            "/home": (BuildContext context) => const HomePage(),
             "/loginscreen": (BuildContext context) => const LoginScreen(),
           },
         ),

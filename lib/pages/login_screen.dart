@@ -33,7 +33,7 @@ class _LoginScreenState extends State<LoginScreen> {
       print(userCredential);
       debugPrint('=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-');
       Navigator.pushNamedAndRemoveUntil(
-          context, "/", (Route<dynamic> route) => false);
+          context, "/home", (Route<dynamic> route) => false);
     } on FirebaseAuthException catch (e) {
       //Could have used Get snack bar for a more appealing message, but I do not
       // want to bloat the application with plugins.
