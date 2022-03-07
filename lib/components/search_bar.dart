@@ -26,7 +26,7 @@ class _SearchBarState extends State<SearchBar> {
   @override
   Widget build(BuildContext context) {
     return Container(
-      height: 290.h,
+      height: 300.h,
       width: 335.w,
       margin: EdgeInsets.only(bottom: 10.h),
       decoration: BoxDecoration(
@@ -81,11 +81,13 @@ class _SearchBarState extends State<SearchBar> {
                       iconSize: 0,
                       value: selectedCity,
                       isExpanded: true,
+                      style: TextStyle(fontSize: 13.sp, color: Colors.black),
                       itemPadding: EdgeInsets.symmetric(horizontal: 5.w),
                       itemHeight: 45.h,
                       dropdownDecoration: BoxDecoration(
                           borderRadius: BorderRadius.circular(10.r)),
                       dropdownPadding: EdgeInsets.symmetric(vertical: 5.h),
+                      buttonHeight: 25.h,
                       selectedItemBuilder: (BuildContext context) =>
                           Provider.of<AppState>(context, listen: true)
                               .cities

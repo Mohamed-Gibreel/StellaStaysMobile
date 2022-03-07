@@ -151,50 +151,47 @@ class _DatePickerState extends State<DatePicker>
                       DateRangePickerNavigationDirection.vertical,
                 ),
               ),
-              SafeArea(
-                child: Container(
-                  decoration: BoxDecoration(
-                      border: Border(
-                          top:
-                              BorderSide(color: Colors.black.withOpacity(.3)))),
-                  padding: EdgeInsets.only(left: 20.w, right: 20.w, top: 15.h),
-                  child: Row(
-                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                    children: [
-                      TextButton(
-                          onPressed: () {
-                            setState(() {
-                              dateRangePickerController.selectedRange = null;
-                            });
-                          },
-                          child: Text(
-                            "Clear",
-                            style: TextStyle(
-                                color: Colors.black,
-                                fontSize: 14.sp,
-                                fontWeight: FontWeight.bold),
-                          )),
-                      InkWell(
-                        onTap: () {
-                          Navigator.of(context)
-                              .pop(dateRangePickerController.selectedRange);
+              Container(
+                decoration: BoxDecoration(
+                    border: Border(
+                        top: BorderSide(color: Colors.black.withOpacity(.3)))),
+                padding: EdgeInsets.symmetric(horizontal: 20.h, vertical: 15.h),
+                child: Row(
+                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                  children: [
+                    TextButton(
+                        onPressed: () {
+                          setState(() {
+                            dateRangePickerController.selectedRange = null;
+                          });
                         },
-                        child: Container(
-                          padding: EdgeInsets.symmetric(
-                              horizontal: 20.w, vertical: 15.h),
-                          decoration: BoxDecoration(
-                            borderRadius: BorderRadius.circular(50.r),
-                            color: Constants.mainColor,
-                          ),
-                          child: Text(
-                            "Apply Date",
-                            style:
-                                TextStyle(fontSize: 14.sp, color: Colors.white),
-                          ),
+                        child: Text(
+                          "Clear",
+                          style: TextStyle(
+                              color: Colors.black,
+                              fontSize: 14.sp,
+                              fontWeight: FontWeight.bold),
+                        )),
+                    InkWell(
+                      onTap: () {
+                        Navigator.of(context)
+                            .pop(dateRangePickerController.selectedRange);
+                      },
+                      child: Container(
+                        padding: EdgeInsets.symmetric(
+                            horizontal: 20.w, vertical: 15.h),
+                        decoration: BoxDecoration(
+                          borderRadius: BorderRadius.circular(50.r),
+                          color: Constants.mainColor,
                         ),
-                      )
-                    ],
-                  ),
+                        child: Text(
+                          "Apply Date",
+                          style:
+                              TextStyle(fontSize: 14.sp, color: Colors.white),
+                        ),
+                      ),
+                    )
+                  ],
                 ),
               )
             ],
