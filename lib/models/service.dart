@@ -3,16 +3,18 @@ import 'dart:convert';
 import 'package:collection/collection.dart';
 
 class Service {
-  int id;
+  int? id;
   List<String> city;
   String? imageUrl;
   String? title;
+  String? description;
 
   Service(
-      {required this.id,
+      {this.id,
       required this.city,
       required this.imageUrl,
-      required this.title});
+      required this.title,
+      required this.description});
 
   @override
   String toString() {
@@ -20,10 +22,10 @@ class Service {
   }
 
   factory Service.fromMap(Map<String, dynamic> data) => Service(
-        id: data['id'] as int,
         city: data['city'] as List<String>,
-        imageUrl: data['imageUrl'] as String,
+        imageUrl: data['imageURL'] as String,
         title: data['title'] as String,
+        description: data['description'] as String,
       );
 
   Map<String, dynamic> toMap() => {

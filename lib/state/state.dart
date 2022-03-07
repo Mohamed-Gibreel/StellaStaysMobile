@@ -1,3 +1,6 @@
+import 'dart:developer';
+
+import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:stella_stays_mobile/models/property.dart';
@@ -5,26 +8,7 @@ import 'package:stella_stays_mobile/models/service.dart';
 
 class AppState with ChangeNotifier {
   late UserCredential user;
-  List<Service> services = [
-    Service(
-        id: 1,
-        city: [
-          "Dubai",
-          "Montreal",
-        ],
-        title: "Home Cleaning",
-        imageUrl: "assets/cleaning-service.png"),
-    Service(
-        id: 2,
-        city: ["Dubai", "Montreal"],
-        title: "Car Rental",
-        imageUrl: "assets/cleaning-service.png"),
-    Service(
-        id: 3,
-        city: ["Dubai", "Manama"],
-        title: "Food",
-        imageUrl: "assets/cleaning-service.png"),
-  ];
+  List<Service> services = [];
   List<Property> properties = [
     Property(
         propertyPrice: "1,250",
@@ -65,6 +49,26 @@ class AppState with ChangeNotifier {
     return uniqueCities;
   }
 
+  Future<List<Service>> getServicesFromFirebase() async {
+    FirebaseFirestore firestore = FirebaseFirestore.instance;
+    CollectionReference servicesReference = firestore.collection('services');
+    List<QueryDocumentSnapshot<Object?>> servicesDocs =
+        (await servicesReference.get()).docs;
+    List<Service> services = [];
+    for (var i = 0; i < servicesDocs.length; i++) {
+      var service = servicesDocs[i].data() as Map<String, dynamic>;
+      List<String> cities = [];
+      for (var city in service['city']) {
+        cities.add(city.toString());
+      }
+      service['city'] = cities;
+      Service customService = Service.fromMap(service);
+      customService.id = i + 1;
+      services.add(customService);
+    }
+    return services;
+  }
+
   Map<String, List<Service>> getServicesBasedOnCities(
       List<Service> services, Set<String> cities) {
     Map<String, List<Service>> result = {};
@@ -78,13 +82,12 @@ class AppState with ChangeNotifier {
 
   Future<Map<String, Iterable<Service>>> loadData() async {
     loadingData = true;
+    services = await getServicesFromFirebase();
     cities = getAllCities();
+    inspect(services);
     filteredServices = getServicesBasedOnCities(services, cities);
-    //To mimic an API call
-    await Future.delayed(const Duration(seconds: 4), () {
-      loadingData = false;
-      notifyListeners();
-    });
+    loadingData = false;
+    notifyListeners();
     return filteredServices;
   }
 }

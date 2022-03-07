@@ -39,6 +39,9 @@ dependencies:
   firebase_auth: ^3.3.9
   form_field_validator: ^1.1.0
   flutter_displaymode: ^0.3.2
+  cached_network_image: ^3.2.0
+  syncfusion_flutter_datepicker: ^19.4.54
+  intl: ^0.17.0
 
 dev_dependencies:
   flutter_test:

@@ -1,3 +1,5 @@
+import 'dart:developer';
+
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
@@ -187,6 +189,9 @@ List<Widget> convertServicesToWidgets(BuildContext ctx) {
       widgets.add(ServiceTile(serviceCity: key, serviceList: value.toList()));
     });
   } else {
+    widgets.add(
+      Text(services.length.toString()),
+    );
     widgets.add(SizedBox(
       height: 50.h,
       child: Center(
@@ -233,8 +238,7 @@ class _HomePageState extends State<HomePage> {
   @override
   void initState() {
     super.initState();
-    getData();
-    getServicesFromFirebase();
+    loadData();
   }
 
   @override
@@ -242,15 +246,8 @@ class _HomePageState extends State<HomePage> {
     super.dispose();
   }
 
-  getData() async {
+  loadData() async {
     await Provider.of<AppState>(context, listen: false).loadData();
-  }
-
-  void getServicesFromFirebase() async {
-    CollectionReference services = firestore.collection('services');
-    debugPrint('=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-');
-    print((await services.get()).docs);
-    debugPrint('=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-');
   }
 
   @override
@@ -334,6 +331,7 @@ class _HomePageState extends State<HomePage> {
           },
         ),
         body: SingleChildScrollView(
+          physics: const ClampingScrollPhysics(),
           child: Column(
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [

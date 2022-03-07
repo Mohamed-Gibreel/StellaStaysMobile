@@ -1,6 +1,7 @@
 import 'dart:developer';
 import 'dart:io';
 
+import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/rendering.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
@@ -74,12 +75,18 @@ class ServicePage extends StatelessWidget {
           Stack(children: [
             Hero(
               tag: heroTag,
-              child: Container(
-                height: 260.h,
-                decoration: BoxDecoration(
+              child: CachedNetworkImage(
+                imageUrl: service.imageUrl ?? "",
+                imageBuilder: (context, imageProvider) => Container(
+                  height: 260.h,
+                  decoration: BoxDecoration(
                     image: DecorationImage(
-                        image: AssetImage(service.imageUrl ?? ""),
-                        fit: BoxFit.cover)),
+                        image: imageProvider, fit: BoxFit.cover),
+                  ),
+                ),
+                placeholder: (context, url) =>
+                    const CircularProgressIndicator(),
+                errorWidget: (context, url, error) => const Icon(Icons.error),
               ),
             ),
             Container(
@@ -147,7 +154,7 @@ class ServicePage extends StatelessWidget {
                   crossAxisAlignment: CrossAxisAlignment.start,
                   children: [
                     Text(
-                      "Deep cleaning",
+                      service.title.toString(),
                       style: TextStyle(
                           fontSize: 15.sp, fontWeight: FontWeight.w600),
                     ),
@@ -157,7 +164,7 @@ class ServicePage extends StatelessWidget {
                     SizedBox(
                       width: 310.w,
                       child: Text(
-                        "Eget aliquet nibh praesent tristique. Elit ullamcorper dignissim cras tincidunt lobortis. Leo vel orci porta non. Dictumst vestibulum rhoncus est pellentesque elit ullamcorper.",
+                        service.description.toString(),
                         style: TextStyle(fontSize: 14.sp),
                       ),
                     )
@@ -166,36 +173,38 @@ class ServicePage extends StatelessWidget {
                 SizedBox(
                   height: 36.h,
                 ),
-                Column(
-                  crossAxisAlignment: CrossAxisAlignment.start,
-                  children: [
-                    Text(
-                      "Quick cleaning",
-                      style: TextStyle(
-                          fontSize: 15.sp, fontWeight: FontWeight.w600),
-                    ),
-                    SizedBox(
-                      height: 7.h,
-                    ),
-                    SizedBox(
-                      width: 310.w,
-                      child: Text(
-                        "Fames ac turpis egestas maecenas pharetra convallis posuere morbi. Amet massa vitae tortor condimentum lacinia quis.",
-                        style: TextStyle(fontSize: 14.sp),
-                      ),
-                    ),
-                    SizedBox(
-                      height: 25.h,
-                    ),
-                    SizedBox(
-                      width: 310.w,
-                      child: Text(
-                        "Vitae ultricies leo integer malesuada nunc vel. Convallis convallis tellus id interdum velit laoreet id donec. Pellentesque habitant.",
-                        style: TextStyle(fontSize: 14.sp),
-                      ),
-                    ),
-                  ],
-                ),
+
+                //Old sample data to show
+                // Column(
+                //   crossAxisAlignment: CrossAxisAlignment.start,
+                //   children: [
+                //     Text(
+                //       "Quick cleaning",
+                //       style: TextStyle(
+                //           fontSize: 15.sp, fontWeight: FontWeight.w600),
+                //     ),
+                //     SizedBox(
+                //       height: 7.h,
+                //     ),
+                //     SizedBox(
+                //       width: 310.w,
+                //       child: Text(
+                //         "Fames ac turpis egestas maecenas pharetra convallis posuere morbi. Amet massa vitae tortor condimentum lacinia quis.",
+                //         style: TextStyle(fontSize: 14.sp),
+                //       ),
+                //     ),
+                //     SizedBox(
+                //       height: 25.h,
+                //     ),
+                //     SizedBox(
+                //       width: 310.w,
+                //       child: Text(
+                //         "Vitae ultricies leo integer malesuada nunc vel. Convallis convallis tellus id interdum velit laoreet id donec. Pellentesque habitant.",
+                //         style: TextStyle(fontSize: 14.sp),
+                //       ),
+                //     ),
+                //   ],
+                // ),
               ],
             ),
           )
