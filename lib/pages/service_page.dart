@@ -82,6 +82,19 @@ class ServicePage extends StatelessWidget {
                         fit: BoxFit.cover)),
               ),
             ),
+            Container(
+              height: 260.h,
+              decoration: BoxDecoration(
+                  color: Colors.white,
+                  gradient: LinearGradient(
+                    begin: FractionalOffset.topCenter,
+                    end: FractionalOffset.bottomCenter,
+                    colors: [
+                      Colors.black.withOpacity(0.25),
+                      Colors.black.withOpacity(0.25),
+                    ],
+                  )),
+            ),
             SafeArea(
                 child: GestureDetector(
               onTap: () {

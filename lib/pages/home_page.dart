@@ -27,11 +27,26 @@ Widget searchSection(BuildContext ctx) {
       //TODO: Try to replicate the gradient in the design.
       //Tried to use RadialGradient to get the gradient effect but I wasn't
       //able to replicate it.
+
+      // Temp fix:
       Image.asset(
         "assets/background.png",
         fit: BoxFit.cover,
         width: double.infinity,
         height: 560.h,
+      ),
+      Container(
+        height: 560.h,
+        decoration: BoxDecoration(
+            color: Colors.white,
+            gradient: LinearGradient(
+              begin: FractionalOffset.topCenter,
+              end: FractionalOffset.bottomCenter,
+              colors: [
+                Colors.black.withOpacity(0.25),
+                Colors.black.withOpacity(0.25),
+              ],
+            )),
       ),
       SafeArea(
         bottom: false,
@@ -234,7 +249,7 @@ class _HomePageState extends State<HomePage> {
   void getServicesFromFirebase() async {
     CollectionReference services = firestore.collection('services');
     debugPrint('=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-');
-    print(await services.get());
+    print((await services.get()).docs);
     debugPrint('=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-');
   }
 
